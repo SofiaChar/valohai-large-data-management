@@ -1,0 +1,18 @@
+- step:
+    name: generate-dataset
+    image: pytorch/pytorch
+    environment: staging-aws-eu-west-1-g4dn-xlarge
+    command:
+      - pip install boto3 valohai-utils
+      - python generate_prod_dataset.py
+
+- step:
+    name: update-dataset
+    image: pytorch/pytorch
+    environment: staging-aws-eu-west-1-g4dn-xlarge
+    command:
+      - pip install boto3 valohai-utils
+      - python update_dataset.py
+    inputs:
+      - name: production_dataset
+        default: 'datum://01894162-902d-bcfb-8008-7d99f691993e'
