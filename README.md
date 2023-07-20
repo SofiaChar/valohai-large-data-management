@@ -84,7 +84,7 @@ vh pipeline run dataset-generation-pipeline --adhoc
 ## <div align="center">Details explained</div>
 
 <details open>
-<summary> Data Fetching </summary>
+<summary> <strong> Data Fetching </strong> </summary>
 
 1. Initialize `S3DataDownloader`: Set up the class with the bucket name, folder prefix, and local save path.
 
@@ -97,7 +97,7 @@ vh pipeline run dataset-generation-pipeline --adhoc
 </details>
 
 <details open>
-<summary> Data Preprocessing and Dataset Management </summary>
+<summary> <strong> Data Preprocessing and Dataset Management </strong> </summary>
 
 1. Data Preprocessing: In the `preprocess_data` method, we make some random changes to the binary files, which you can customize for your specific needs.
 
@@ -107,7 +107,7 @@ vh pipeline run dataset-generation-pipeline --adhoc
 </details>
 
 <details open>
-<summary> Unzipping the Dataset </summary>
+<summary> <strong> Unzipping the Dataset </strong> </summary>
 
 1. Unzipping to Target Directory: If a `target_dir` is specified, the `untar` function unzips the dataset to the specified directory. This option is ideal when you want full control over the location where the dataset is extracted.
 
