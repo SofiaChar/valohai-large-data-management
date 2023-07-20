@@ -15,4 +15,34 @@
       - python update_dataset.py
     inputs:
       - name: production_dataset
-        default: 'datum://01894162-902d-bcfb-8008-7d99f691993e'
+        default: datum://production_dataset
+
+- step:
+    name: unzip-dataset
+    image: pytorch/pytorch
+    environment: staging-aws-eu-west-1-g4dn-xlarge
+    command:
+      - pip install boto3 valohai-utils
+      - python unzip_dataset.py
+    inputs:
+      - name: dataset
+        default: datum://01897357-eb80-de47-11f2-64d88c823356
+
+- pipeline:
+    name: dataset-generation-pipeline
+    nodes:
+      - name: preprocess
+        type: execution
+        step: generate-dataset
+      - name: update
+        type: execution
+        step: update-dataset
+      - name: unzip
+        type: execution
+        step: unzip-dataset
+        override:
+          inputs:
+            - name: dataset
+    edges:
+      - [preprocess.output.*.tar, update.input.production_dataset]
+      - [update.output.*, unzip.input.dataset]

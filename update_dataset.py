@@ -6,8 +6,8 @@ from utils.preprocess_data import S3DataPreprocessor
 second_data_configs = {
     'bucket_name': 'dd-sample-bucket',
     'folder_prefix': 'bigfolder/randomdata/',
-    'data_path': '/valohai/repository/bucket_contents',
-    'set_prod_alias': False,
+    'data_path': '/valohai/repository/dataset',
+    'set_production_alias': False,
     '200_samples': True
 }
 
@@ -20,11 +20,7 @@ def update_dataset(configs):
     preprocessor = S3DataPreprocessor(save_path=configs['data_path'])
     preprocessor.preprocess_data()
 
-    # get prod dataset & join with new data
-
-
-    # tar the results
-    preprocessor.tar_directory(f'{time.strftime("%Y.%m.%d-%H:%M")}.tar', set_alias=configs['set_prod_alias'])
+    preprocessor.update_existing_tar(new_tar_name=f'{time.strftime("%Y.%m.%d-%H.%M")}.tar')
 
 
 if __name__ == '__main__':
