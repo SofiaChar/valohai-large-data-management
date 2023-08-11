@@ -15,6 +15,8 @@ This repository demonstrates the effective utilization of large datasets with [V
 
 This streamlined workflow empowers you to focus on your machine learning tasks, while Valohai handles data management, versioning, and efficient storage.
 
+**_Note: In our case, the machines running Valohai jobs have a Service Account with permission to the S3 bucket. This eliminates the need for key rotation or extra authentication steps in the code. Boto3 will automatically use the IAM Role attached to our EC2 instance for authentication._**
+
 ## <div align="center">Installation</div>
 
 Login to the [Valohai app][app] and create a new project.
@@ -54,6 +56,9 @@ vh project create
 ```bash
 git clone https://github.com/valohai/large-data-management-example.git .
 ```
+
+**Note: You may need to update the environment section in the valohai.yaml file to point to your specific environment, 
+or you can remove the line(s) to use the project default.**
 
 ### **Running Executions:**
 To run individual steps, execute the following command:
@@ -116,7 +121,43 @@ vh pipeline run dataset-generation-pipeline --adhoc
 **_Note:_** `process_archives=False`. By providing this parameter to `valohai.inputs`, you instruct Valohai not to automatically unzip the dataset. 
 </details>
 
+## <div align="center">Selecting the Right Archive Format</div>
 
+Choosing the right archive format is crucial when handling large datasets. Let's explore the best uses for three common formats: tar, tar.gz, and zip.
 
+### Tar (.tar)
 
+Use Tar When:
 
+* Bundling files or directories without compression.
+* Preserving file attributes, ownership, and timestamps.
+* Cross-platform compatibility is important.
+
+Considerations:
+
+Larger file sizes compared to compressed formats.
+Ideal for maintaining file attributes.
+
+### Tar.gz (.tar.gz)
+Use Tar.gz When:
+
+* Compressing files to save space while retaining metadata.
+* Efficient storage and transfer of datasets are key.
+* Working with large text-based files.
+
+Considerations:
+
+Smaller file sizes due to compression.
+Compression takes more CPU time.
+
+### Zip (.zip)
+Use Zip When:
+
+* Compatibility with Windows systems is necessary.
+* Balanced compression and cross-platform exchange are desired.
+* Password protection or encryption is needed.
+
+Considerations:
+
+Larger file sizes compared to tar.gz.
+Offers various compression levels.
