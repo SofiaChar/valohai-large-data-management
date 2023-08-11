@@ -95,7 +95,7 @@ vh pipeline run dataset-generation-pipeline --adhoc
 
 2. Utilize Paginator for Large Datasets: The paginator in `_get_all_files` method efficiently loops through paginated responses, ensuring all S3 objects are fetched, regardless of dataset size.
 
-3. Fetch All Files in the Bucket: Accumulate all objects from the specified S3 bucket and prefix, handling potential data volumes exceeding 1000 files.
+3. Fetch All Files in the Bucket: Accumulate all objects from the specified S3 bucket and prefix, handling potential data volumes exceeding 10K files.
 
 4. Download and Save Files: Use `s3_client.download_file` to download and store each selected file locally.
 
@@ -106,17 +106,20 @@ vh pipeline run dataset-generation-pipeline --adhoc
 
 1. Data Preprocessing: In the `preprocess_data` method, we make some random changes to the binary files, which you can customize for your specific needs.
 
-2. Archiving the Dataset: When creating the production dataset, the `tar_directory` method stores the preprocessed files into a single .tar file. This file is then saved in Valohai outputs for easy dataset access.
+2. Archiving the Dataset: When creating the production dataset, the `tar_directory` method stores the preprocessed files into a single .tar file. This file is then saved in Valohai outputs and to Valohai datasets for easy dataset access. 
 
-3. Dataset Alias: In the `_save_metadata` method, we create an alias called "production_dataset." This alias allows us to easily refer to the latest version of the dataset in other parts of the project.
+3. Dataset Alias: In the `_save_metadata` method, we create an alias. This alias allows us to easily refer to the latest version of the dataset in other parts of the project. This metadata includes information about the dataset's version, URI, and associated aliases.
+
+4. Updating a single dataset archive or maintaining them in distinct files.
+   * `save_updated_dataset_by_appending_tar` Continuously adds new preprocessed data to an existing .tar archive, keeping one evolving dataset.
+
+   * `save_updated_dataset_as_two_tars` Keeps the dataset in separate .tar archives; the initial dataset and additional data are saved in separate tars.
 </details>
 
 <details open>
 <summary> <strong> Unzipping the Dataset </strong> </summary>
 
-1. Unzipping to Target Directory: If a `target_dir` is specified, the `untar` function unzips the dataset to the specified directory. This option is ideal when you want full control over the location where the dataset is extracted.
-
-2. Automatic Unzipping to Tmp Directory: If no `target_dir` is specified, the `untar` function will automatically unzip the dataset to a temporary directory managed by Valohai. This option is useful when you prefer Valohai to handle the unzipping process.
+Unzipping to Target Directory: the `untar` function unzips the dataset to the specified directory. Ideal when you want full control over the location where the dataset is extracted.
 
 **_Note:_** `process_archives=False`. By providing this parameter to `valohai.inputs`, you instruct Valohai not to automatically unzip the dataset. 
 </details>
