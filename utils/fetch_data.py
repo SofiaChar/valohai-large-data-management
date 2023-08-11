@@ -9,25 +9,19 @@ class S3DataDownloader:
         self.prefix = prefix
         self.save_path = save_path
 
-    def download_files(self, last_200=False):
+    def download_files(self):
         # Fetch the total number of files in the S3 bucket
 
         objects, s3_client = self._get_all_files()
         total_files = len(objects)
 
-        # Select the desired number of objects to download
-        if last_200:
-            print(f"--Downloading additional 200 files. Total files found: {total_files}")
-            objects_to_download = objects[-200:]
-        else:
-            print(f"--Downloading 19K files. Total files found: {total_files}")
-            objects_to_download = objects[:19000]
+        print(f"--Downloading {total_files} files.")
 
         # Create the save path directory
         os.makedirs(self.save_path, exist_ok=True)
 
         # Iterate over each object to download
-        for obj in tqdm(objects_to_download):
+        for obj in tqdm(objects):
             filename = obj['Key']
             file = os.path.basename(filename)
             s3_client.download_file(self.bucket_name, filename, os.path.join(self.save_path, file))

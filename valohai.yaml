@@ -1,6 +1,6 @@
 - step:
     name: generate-dataset
-    image: pytorch/pytorch
+    image: python:3.9
     environment: staging-aws-eu-west-1-g4dn-xlarge
     command:
       - pip install boto3 valohai-utils
@@ -8,25 +8,25 @@
 
 - step:
     name: update-dataset
-    image: pytorch/pytorch
+    image: python:3.9
     environment: staging-aws-eu-west-1-g4dn-xlarge
     command:
       - pip install boto3 valohai-utils
       - python update_dataset.py
     inputs:
       - name: production_dataset
-        default: datum://production_dataset
+        default: dataset://large-dataset/production_dataset
 
 - step:
     name: unzip-dataset
-    image: pytorch/pytorch
+    image: python:3.9
     environment: staging-aws-eu-west-1-g4dn-xlarge
     command:
       - pip install boto3 valohai-utils
       - python unzip_dataset.py
     inputs:
       - name: dataset
-        default: datum://01897357-eb80-de47-11f2-64d88c823356
+        default: dataset://large-dataset/extended_dataset
 
 - pipeline:
     name: dataset-generation-pipeline
@@ -37,6 +37,9 @@
       - name: update
         type: execution
         step: update-dataset
+        override:
+          inputs:
+            - name: production_dataset
       - name: unzip
         type: execution
         step: unzip-dataset

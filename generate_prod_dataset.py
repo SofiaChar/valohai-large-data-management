@@ -1,13 +1,13 @@
 import time
 
 from utils.fetch_data import S3DataDownloader
-from utils.preprocess_data import S3DataPreprocessor
+from utils.process_data import S3DataProcessor
 
 prod_data_configs = {
     'bucket_name': 'dd-sample-bucket',
     'folder_prefix': 'bigfolder/randomdata/',
     'data_path': '/valohai/repository/dataset',
-    'set_production_alias': True,
+    'set_alias': 'production_dataset',
 }
 
 
@@ -16,9 +16,10 @@ def generate_prod_dataset(configs):
                                   save_path=configs['data_path'])
     downloader.download_files()
 
-    preprocessor = S3DataPreprocessor(save_path=configs['data_path'])
+    preprocessor = S3DataProcessor(save_path=configs['data_path'])
     preprocessor.preprocess_data()
-    preprocessor.tar_directory(tarname=f'{time.strftime("%Y.%m.%d-%H.%M")}.tar', set_production_alias=configs['set_production_alias'])
+
+    preprocessor.tar_directory(tarname=f'{time.strftime("%Y.%m.%d-%H.%M")}.tar', alias=configs['set_alias'])
 
 
 if __name__ == '__main__':

@@ -4,20 +4,18 @@ import tarfile
 import valohai
 
 
-def untar(target_dir=None):
+def untar(target_dir):
     # Extract to target directory
-    if target_dir:
-        tar_path = valohai.inputs('dataset').path(process_archives=False)
+
+    tar_paths = valohai.inputs('dataset').paths(
+        process_archives=False)  # when process_archives = True, all archives are extracted automatically to tmp dir
+
+    for tar_path in tar_paths:
         tar = tarfile.open(tar_path)
         tar.extractall(path=target_dir)
         out = os.path.abspath(target_dir)
 
-    # Automatically extract to tmp directory
-    else:
-        files = valohai.inputs('dataset').path()
-        out = os.path.dirname(files)
-
-    print(f'--TAR is extracted to {out}')
+    print(f'\n --TARs are extracted to {out}')
 
 
 if __name__ == '__main__':
